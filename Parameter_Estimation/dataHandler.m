@@ -1,7 +1,7 @@
 % Functions for sampling the data and computing the least squared error
 % between 2 functions
 classdef dataHandler
-    methods
+    methods (Static)
         % Sample Times
         % Parameters
         % Returns
