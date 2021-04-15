@@ -80,7 +80,8 @@ while gamma <= gamma_true * range
         end
         model_sample_I = round(model_sample_I);
         model_sample_S = round(model_sample_S);
-        loglik(test) = errorMeasures.likelihood_estimation(observed_I, model_sample_I, false_positive_rate, false_negative_rate, N);
+        %loglik(test) = errorMeasures.likelihood_estimation(observed_I, model_sample_I, false_positive_rate, false_negative_rate, N);
+        loglik(test) = errorMeasures.squared_error(observed_I, model_sample_I);%, false_positive_rate, false_negative_rate, N);
         betas(test) = beta;
         gammas(test) = gamma;
         test = test + 1
@@ -89,14 +90,6 @@ while gamma <= gamma_true * range
     gamma = search_rate * gamma;
 end
 
-
-E = reshape(loglik,sqrt(length(loglik)),sqrt(length(loglik)));
-G = reshape(gammas, sqrt(length(loglik)), sqrt(length(loglik)));
-B = reshape(betas, sqrt(length(loglik)), sqrt(length(loglik)));
-figure;
-contour(B,G,E);
-%scatter3(betas, gammas, errors_S,'r','filled');
-%hold on;
 figure;
 scatter3(betas, gammas, loglik,'b');
 set(gca,'Xscale','log','Yscale','log')
@@ -104,6 +97,12 @@ xlabel("Beta")
 ylabel("Gamma")
 zlabel("loglik")
 title("Likelihood Plot");
+
+E = reshape(loglik,sqrt(length(loglik)),sqrt(length(loglik)));
+G = reshape(gammas, sqrt(length(loglik)), sqrt(length(loglik)));
+B = reshape(betas, sqrt(length(loglik)), sqrt(length(loglik)));
+figure;
+contour(B,G,E);
 
 [c,i] = min(loglik);
 [t_ode, pop1]=ode45(@dataHandler.ode_solution_SIS,[0 max_time],[i0 s0],options,[betas(i) gammas(i)]);

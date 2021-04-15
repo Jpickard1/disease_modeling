@@ -33,7 +33,7 @@ classdef errorMeasures
                     likelihood = likelihood + log(sum);
                 end
             end
-            log_likelihood = -1 * likelihood;
+            log_likelihood = -1 * likelihood; % just be consistent
         end
     end
 end
